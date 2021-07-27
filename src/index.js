@@ -4,7 +4,6 @@ import html from './index.html';
 import ItemRepository from './ItemRepository.js';
 import ItemSorter from './ItemSorter.js';
 
-// declarations and
 let currentEditItem = null;
 const form = document.querySelector('#itemForm'); // select the form
 const itemInput = document.querySelector('#itemInput'); // select the input box from the form
@@ -17,10 +16,8 @@ const itemRepository = new ItemRepository();
 const itemSorter = new ItemSorter(itemList, itemRepository);
 
 const renderItems = () => {
-  // clear items HTML
   itemList.innerHTML = '';
 
-  // generate items HTML
   itemRepository.getItems().forEach((todoItem) => {
     const completed = todoItem.completed ? 'completed' : '';
     itemList.insertAdjacentHTML(
@@ -42,14 +39,11 @@ const renderItems = () => {
   });
 };
 
-// event handler to add/edit a list item
 form.addEventListener('submit', (e) => {
   e.preventDefault();
 
-  // collect input asnd clear textbox
   const itemText = itemInput.value;
 
-  // validate
   if (!itemText || !itemText.trim()) {
     inform.innerHTML = 'Enter a valid to do';
     inform.classList.add('showItem', 'alert-danger');
@@ -59,7 +53,6 @@ form.addEventListener('submit', (e) => {
     return;
   }
 
-  // add/edit
   if (currentEditItem) {
     itemRepository.updateItem(currentEditItem.id, itemText);
     currentEditItem = null;
@@ -70,26 +63,21 @@ form.addEventListener('submit', (e) => {
     renderItems();
   }
 
-  // clear input text
   itemInput.value = '';
 });
 
-// event handler to clear items
 clearButton.addEventListener('click', (e) => {
   e.preventDefault();
   itemRepository.removeCompletedItems();
   renderItems();
 });
 
-// event handler to complete, edit and delete
 itemList.addEventListener('click', (e) => {
   e.preventDefault();
 
-  // decide which of our action button were clicked (if any)
   const targetClasses = e.target.classList;
   const getItemId = () => e.target.closest('div.item').id;
 
-  // complete/edit/delete
   if (targetClasses.contains('complete-item')) {
     itemRepository.completeItem(getItemId());
     renderItems();
